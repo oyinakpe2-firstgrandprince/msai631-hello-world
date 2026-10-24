@@ -6,7 +6,17 @@ It is built with gr.Blocks so it can grow into the Week 3 chatbot.
 import platform
 import gradio as gr
 
+# The Space runs on ZeroGPU hardware, which requires at least one function
+# decorated with @spaces.GPU. The fallback keeps the app runnable locally.
+try:
+    import spaces
+    gpu = spaces.GPU
+except ImportError:
+    def gpu(fn):
+        return fn
 
+
+@gpu
 def greet(name: str) -> str:
     name = (name or "").strip() or "World"
     return f"Hello, {name}! Your MSAI-631 development environment is running."
